@@ -1,10 +1,12 @@
 import dotenv from "dotenv";
 dotenv.config();
 import cors from 'cors';
-import express, { Request, Response }  from 'express';
+import express, { NextFunction, Request, Response }  from 'express';
 import connectToDatabase from './config/db';
 import { PORT,NODE_ENV } from './constants/env';
 import cookieParser from "cookie-parser";
+import errorHandler from "./middleware/errorHandler";
+import { OK } from "./constants/http";
 
 const app = express();
 
@@ -16,13 +18,14 @@ app.use(cors({
 }));
 app.use(cookieParser());
 
-app.get("/", (req: Request, res: Response) => {
-    return res.status(200).json({
+app.get("/", (req: Request, res: Response, next: NextFunction) => {
+    return res.status(OK).json({
         status: "Healthy"
     });
-});
+}
+);
 
-// app.use(errorHandler);
+app.use(errorHandler);
 
 const startServer = async () => {
   try {
