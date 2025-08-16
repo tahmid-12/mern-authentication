@@ -1,17 +1,28 @@
 import dotenv from "dotenv";
 dotenv.config();
-
+import cors from 'cors';
 import express, { Request, Response }  from 'express';
 import connectToDatabase from './config/db';
 import { PORT,NODE_ENV } from './constants/env';
+import cookieParser from "cookie-parser";
 
 const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cors({
+    origin: "*",
+    credentials: true
+}));
+app.use(cookieParser());
 
 app.get("/", (req: Request, res: Response) => {
     return res.status(200).json({
         status: "Healthy"
     });
 });
+
+// app.use(errorHandler);
 
 const startServer = async () => {
   try {
