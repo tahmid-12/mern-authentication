@@ -7,6 +7,7 @@ import { PORT,NODE_ENV } from './constants/env';
 import cookieParser from "cookie-parser";
 import errorHandler from "./middleware/errorHandler";
 import { OK } from "./constants/http";
+import authRoutes from "./routes/authRoutes";
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.get("/", (req: Request, res: Response, next: NextFunction) => {
     });
 }
 );
+app.use("/auth", authRoutes);
 
 app.use(errorHandler);
 
