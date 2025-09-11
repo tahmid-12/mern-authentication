@@ -17,7 +17,7 @@ const getAccessTokenCookieOptions = (): CookieOptions => ({
 const getRefreshTokenCookieOptions = (): CookieOptions => ({
     ...defaults,
     expires: thirtyDaysFromNow(),
-    path: "/atuh/refresh"
+    path: "/auth/refresh"
 })
 
 
