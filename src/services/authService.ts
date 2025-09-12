@@ -110,3 +110,53 @@ export const loginUser = async (data: LogInParams) => {
     refreshToken 
   };
 };
+
+export const logoutUser = async (refreshToken?: string) => {
+  if (!refreshToken) return;
+
+  try {
+    const decoded = jwt.verify(refreshToken, JWT_REFRESH_SECRET) as {
+      sessionId: string;
+    };
+
+    if (decoded?.sessionId) {
+      await SessionModel.findByIdAndDelete(decoded.sessionId);
+    }
+  } catch {
+    return;
+  }
+}
+
+export const refreshAccessToken = async (refreshToken?: string) => {
+  if (!refreshToken) return null;
+
+  try {
+    const decoded = jwt.verify(refreshToken, JWT_REFRESH_SECRET) as {
+      sessionId: string;
+    };
+
+    if (!decoded?.sessionId) return null;
+
+    const session = await SessionModel.findById(decoded.sessionId);
+    if (!session) return null;
+
+    const user = await userModel.findById(session.userId);
+    if (!user) return null;
+
+    const accessToken = jwt.sign(
+      {
+        userId: user._id,
+        sessionId: session._id,
+      },
+      JWT_SECRET,
+      {
+        audience: ["user"],
+        expiresIn: "15m",
+      }
+    );
+
+    return { accessToken, refreshToken }; 
+  } catch {
+    return null;
+  }
+};
