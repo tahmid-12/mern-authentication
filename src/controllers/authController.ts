@@ -1,7 +1,7 @@
 import catchErrors from "../utils/catchErrors";
 import { Request, Response } from "express";
-import { loginSchema, registerSchema } from "../schema/schema";
-import { createAccount, loginUser, logoutUser, refreshAccessToken } from "../services/authService";
+import { loginSchema, registerSchema, verificationCodeSchema } from "../schema/schema";
+import { createAccount, loginUser, logoutUser, refreshAccessToken,verifyEmail } from "../services/authService";
 import { CREATED, OK } from "../constants/http";
 import { setAuthCookies } from "../utils/cookies";
 import { ONE_DAY_MS } from "../utils/date";
@@ -76,3 +76,11 @@ export const refreshTokenHandler = catchErrors(
     return res.status(200).json({ message: "Access token refreshed" });
   }
 );
+
+export const verifyEmailHandler = catchErrors(async (req: Request, res: Response) => {
+  const verificationCode = verificationCodeSchema.parse(req.params.code);
+
+  await verifyEmail(verificationCode);
+
+  return res.status(OK).json({ message: "Email verified successfully" });
+});
