@@ -13,6 +13,7 @@ const getOptionalEnv = (key: string, defaultValue: string = ""): string => {
 export const MONGO_URI = getRequiredEnv("MONGODB_URI");
 export const JWT_SECRET = getRequiredEnv("JWT_SECRET");
 export const JWT_REFRESH_SECRET = getRequiredEnv("JWT_REFRESH_SECRET");
+export const APP_ORIGIN = getRequiredEnv("APP_ORIGIN");
 export const NODE_ENV = getOptionalEnv("NODE_ENV", "development");
 export const PORT = getOptionalEnv("PORT", "5000");
 export const EMAIL_SENDER = getOptionalEnv("EMAIL_SENDER");
